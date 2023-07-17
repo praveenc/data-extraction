@@ -187,3 +187,7 @@ pyrightconfig.json
 # End of https://www.toptal.com/developers/gitignore/api/python,jupyternotebooks
 
 .DS_Store
+jupyter_errors.log
+.virtual_documents/
+data/
+faiss/
