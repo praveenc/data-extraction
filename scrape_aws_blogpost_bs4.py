@@ -12,7 +12,7 @@ from rich import print
 from datetime import datetime, timezone
 from pydantic import BaseModel
 from argparse import ArgumentParser
-
+import feedparser
 
 # Path to store extracted blog posts to
 DATADIR = Path("./data/blog_posts")
@@ -22,7 +22,6 @@ DATADIR.mkdir(parents=True, exist_ok=True)
 # Path to store extracted blog posts to pickledb
 DB_DIR = Path("db")
 DB_DIR.mkdir(exist_ok=True, parents=True)
-
 
 class BlogPost(BaseModel):
     title: str
@@ -113,22 +112,33 @@ def scrape_aws_blogpost(url: str, db: pickledb.PickleDB) -> str:
 
 # main function to call the scrape_aws_blogpost function for each blog post
 if __name__ == "__main__":
-    # accept the url as an argument
+
+    url = "https://aws.amazon.com/blogs/machine-learning/feed/"
+    feed = feedparser.parse(url)
+
+    urls = []
+    for entry in feed.entries:
+        urls.append(entry.link)
+
+    # accept the url as an optional argument
     parser = ArgumentParser()
-    parser.add_argument("url", type=str)
+    parser.add_argument("--url", type=str, default=None, required=False)
     args = parser.parse_args()
+
+    # check url argument has been passed
+    if args.url is not None:
+        if args.url not in urls:
+            urls.append(args.url)
 
     # initialize pickledb
     db = pickledb.load(f"{DB_DIR}/blogposts.db", False)
 
-    # Replace with the URL of the blog post you want to scrape
-    urls = [
-        args.url,
-    ]
+    print(f"Scraping {len(urls)} blog posts")
 
     for url in urls:
-        scraped_post = scrape_aws_blogpost(url, db)
+        scraped_post = str(scrape_aws_blogpost(url, db))
         if len(scraped_post) == 0:
-            print(f"Skippeed writing Post.")
+            print(f"Skipped writing Post.")
         else:
-            print(f"Post written to {scraped_post}")
+            file = scraped_post.split("/")[-1]
+            print(f"\tPost written to [b]{file}[/b]")

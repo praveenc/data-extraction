@@ -191,3 +191,4 @@ jupyter_errors.log
 .virtual_documents/
 data/
 faiss/
+db/
