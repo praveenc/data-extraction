@@ -1,6 +1,6 @@
 # Data Extraction
 
-In the [Scrape AWS MachineLearning Blogposts](./scrape_blogpost.ipynb) notebook we demonstrate how to extract content from blog posts using two methods.
+In the [Scrape AWS MachineLearning Blogposts](./websites/aws/scrape_blogpost.ipynb) notebook we demonstrate how to extract content from blog posts using two methods.
 
 - From the websites RSS Feed (top 20 blog posts)
 - Using `BeautifulSoup` python library
