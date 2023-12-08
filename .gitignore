@@ -192,3 +192,8 @@ jupyter_errors.log
 data/
 faiss/
 db/
+aws-wiki/
+scripts/
+unstructured/data
+py-arxiv/
+aws-lambda/
